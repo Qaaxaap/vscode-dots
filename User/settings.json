@@ -20,5 +20,12 @@
   //   * NVIM_APPNAME=vscodium 让 nvim 去读 ~/.config/vscodium/init.lua，
   //     那份由本仓库的 nvim/init.lua 经 home-manager 链接过来，
   //     这样就不会加载 ~/.config/nvim 里的 LazyVim。
-  "vscode-neovim.NVIM_APPNAME": "vscodium"
+  "vscode-neovim.NVIM_APPNAME": "vscodium",
+
+  // vscode-neovim 启动时会提示 “No affinity assigned”。affinity 是 VS Code
+  // 自带的机制，用来把扩展分配到独立的扩展宿主进程；给它一个专属进程能降低
+  // 按键延迟（UI 里点 Yes 写的就是这一条，值 1 是分组号）。
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  }
 }
