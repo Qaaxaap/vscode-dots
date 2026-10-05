@@ -11,11 +11,10 @@
   // 编辑器本体由 nix/pacman 升级，不用它自己检查更新。
   "update.mode": "none",
 
-  "telemetry.telemetryLevel": "off",
+  "telemetry.telemetryLevel": "off"
 
-  // Vim 键位：vscode-neovim 内嵌真的 nvim。可执行文件写 nix profile 的绝对
-  // 路径，免得桌面启动的 VSCodium 在 PATH 里找不到；init 用本仓库那份精简版，
-  // 不加载 LazyVim（它的 UI 插件会和 VS Code 自己的界面打架）。
-  "vscode-neovim.neovimExecutablePaths.linux": "/home/Qaaxaap/.nix-profile/bin/nvim",
-  "vscode-neovim.neovimInitPath": "/home/Qaaxaap/Projects/vscode-dots/nvim-init.lua"
+  // Vim 键位由 vscode-neovim 提供（见 extensions.nix）。这里刻意不写任何路径：
+  // nvim 靠 PATH 找，home-manager 的 home.sessionPath 会把 nix profile 的 bin
+  // 带进 GUI 会话；init 用 nvim 自己的 ~/.config/nvim/init.lua，那份由
+  // ~/nix/config/nvim-dots 链接管理，里面按 vim.g.vscode 分流到精简配置。
 }
