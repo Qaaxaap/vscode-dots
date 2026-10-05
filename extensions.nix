@@ -70,11 +70,14 @@ in
     version = "0.32.3";
     hash = "sha256-BYRiFiyynU0iNB2RLBXc+iGUd0sekvww/LoabKPJGr0=";
   })
+  # 0.164.0 起要求 VS Code ^1.137.0，而 VSCodium 上游最新 release（1.135.06055）
+  # 对应的还是 1.135，装了会报「扩展与 Code 1.135.06055 不兼容」；
+  # 0.162.0 是最后一个只要求 ^1.130.0 的版本。
   (fromOpenVsx {
     namespace = "GitHub";
     name = "vscode-pull-request-github";
-    version = "0.166.1";
-    hash = "sha256-iYofJk5dSQZ4Fd9boE9jQK3euJ5VyUmimVwxgdjAUkk=";
+    version = "0.162.0";
+    hash = "sha256-gZ5RJ/5sIhuGjngUXXflJ2q6vEnbjieYAURw0x4vjyI=";
   })
   (fromOpenVsx {
     namespace = "MS-CEINTL";

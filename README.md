@@ -57,6 +57,16 @@ nix store prefetch-file --json --hash-type sha256 '<上面输出的 download>'
 # 把 version 与 hash 填回 extensions.nix，然后 switch
 ```
 
+**选版本时要看 `engines.vscode`。** VSCodium 的 release 通常落后 VS Code 官方，
+扩展的最新版可能要求更高的 `^1.13x.0`，装上后编辑器会提示「扩展与 Code xxx
+不兼容」（GitHub Pull Requests 的 0.164.0 起就要 `^1.137.0`，只能停在 0.162.0）。
+挑一个 engine 不高于当前 VSCodium 的上游版本号的最新版：
+
+```sh
+curl -s https://open-vsx.org/api/<ns>/<name>/latest | jq '{version, engine: .engines.vscode}'
+curl -s https://open-vsx.org/api/<ns>/<name>/<version> | jq '.engines.vscode'
+```
+
 ## 编辑器本体
 
 VSCodium 与 electron 不由本仓库负责。编辑器是 `~/nix/pkgs/vscodium-electron.nix`
