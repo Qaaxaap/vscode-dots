@@ -11,10 +11,14 @@
   // 编辑器本体由 nix/pacman 升级，不用它自己检查更新。
   "update.mode": "none",
 
-  "telemetry.telemetryLevel": "off"
+  "telemetry.telemetryLevel": "off",
 
-  // Vim 键位由 vscode-neovim 提供（见 extensions.nix）。这里刻意不写任何路径：
-  // nvim 靠 PATH 找，home-manager 的 home.sessionPath 会把 nix profile 的 bin
-  // 带进 GUI 会话；init 用 nvim 自己的 ~/.config/nvim/init.lua，那份由
-  // ~/nix/config/nvim-dots 链接管理，里面按 vim.g.vscode 分流到精简配置。
+  // Vim 键位由 vscode-neovim 提供（见 extensions.nix）。这里只说一个 appname，
+  // 不写任何路径：
+  //   * nvim 可执行文件靠 PATH 找，home-manager 的 home.sessionPath 会把
+  //     nix profile 的 bin 带进 GUI 会话；
+  //   * NVIM_APPNAME=vscodium 让 nvim 去读 ~/.config/vscodium/init.lua，
+  //     那份由本仓库的 nvim/init.lua 经 home-manager 链接过来，
+  //     这样就不会加载 ~/.config/nvim 里的 LazyVim。
+  "vscode-neovim.NVIM_APPNAME": "vscodium"
 }

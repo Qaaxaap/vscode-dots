@@ -67,6 +67,24 @@ curl -s https://open-vsx.org/api/<ns>/<name>/latest | jq '{version, engine: .eng
 curl -s https://open-vsx.org/api/<ns>/<name>/<version> | jq '.engines.vscode'
 ```
 
+## Vim 键位
+
+用 `asvetliakov.vscode-neovim`（见 `extensions.nix`），内嵌系统里那份 nvim。
+settings 里只设一个 appname，不写任何路径：
+
+```json
+"vscode-neovim.NVIM_APPNAME": "vscodium"
+```
+
+nvim 便会读 `~/.config/vscodium/init.lua`，即本仓库的 `nvim/init.lua`
+（由 home-manager 链接过去），不去碰 `~/.config/nvim` 里的 LazyVim —— 那套的
+statusline / telescope / dashboard 会和 VS Code 自己的界面重复。nvim 可执行
+文件靠 PATH 找，home-manager 的 `home.sessionPath` 会把 `~/.nix-profile/bin`
+带进 GUI 会话。
+
+（注意扩展读的设置名是 `neovimInitVimPaths`，不是 `neovimInitPath`；不过既然
+用 NVIM_APPNAME，就不需要它了。）
+
 ## 编辑器本体
 
 VSCodium 与 electron 不由本仓库负责。编辑器是 `~/nix/pkgs/vscodium-electron.nix`
