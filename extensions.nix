@@ -38,6 +38,24 @@ let
         inherit hash;
       };
     };
+
+  # rust-analyzer 要单独处理：open-vsx 那份 vsix 不带 server 二进制（官方
+  # marketplace 那份才带），扩展启动时只认 <扩展目录>/server/rust-analyzer，
+  # 找不到就弹 "we don't ship binaries for your platform yet"；而扩展目录在
+  # store 里只读，它也下不进去。这里把 nixpkgs 的 rust-analyzer 链进去，
+  # 那个 wrapper 里已经设好 RUST_SRC_PATH 指向标准库源码。
+  rustAnalyzer = (fromOpenVsx {
+    namespace = "rust-lang";
+    name = "rust-analyzer";
+    version = "0.4.3072";
+    hash = "sha256-k1McVRxEDI8jxcV9ZCY84IpLgktuY8iHyH2woi1YB3g=";
+  }).overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+      extdir="$out/share/vscode/extensions/rust-lang.rust-analyzer"
+      mkdir -p "$extdir/server"
+      ln -sf ${pkgs.rust-analyzer}/bin/rust-analyzer "$extdir/server/rust-analyzer"
+    '';
+  });
 in
 [
   (fromOpenVsx {
@@ -64,12 +82,7 @@ in
     version = "1.131.0";
     hash = "sha256-f/ydvpgPlZQu1WdSwdbKX0CFUBOu3TTPQCV5Kb5NGJU=";
   })
-  (fromOpenVsx {
-    namespace = "rust-lang";
-    name = "rust-analyzer";
-    version = "0.4.3072";
-    hash = "sha256-k1McVRxEDI8jxcV9ZCY84IpLgktuY8iHyH2woi1YB3g=";
-  })
+  rustAnalyzer
   (fromOpenVsx {
     namespace = "tamasfe";
     name = "even-better-toml";
