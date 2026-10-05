@@ -1,6 +1,6 @@
 {
   // 由 nix 用 mkOutOfStoreSymlink 链接到 ~/.config/VSCodium/User/settings.json，
-  // 在 UI 里改设置会直接写回这个文件（见 config/vsc-dots/README.md）。
+  // 在 UI 里改设置会直接写回这个文件（接入方式见本仓库 README）。
   "editor.fontFamily": "'Maple Mono NF CN','Droid Sans Mono', monospace",
 
   // 扩展由 nix 提供（--extensions-dir 指向只读的 store 目录），
@@ -11,5 +11,11 @@
   // 编辑器本体由 nix/pacman 升级，不用它自己检查更新。
   "update.mode": "none",
 
-  "telemetry.telemetryLevel": "off"
+  "telemetry.telemetryLevel": "off",
+
+  // Vim 键位：vscode-neovim 内嵌真的 nvim。可执行文件写 nix profile 的绝对
+  // 路径，免得桌面启动的 VSCodium 在 PATH 里找不到；init 用本仓库那份精简版，
+  // 不加载 LazyVim（它的 UI 插件会和 VS Code 自己的界面打架）。
+  "vscode-neovim.neovimExecutablePaths.linux": "/home/Qaaxaap/.nix-profile/bin/nvim",
+  "vscode-neovim.neovimInitPath": "/home/Qaaxaap/Projects/vscode-dots/nvim-init.lua"
 }

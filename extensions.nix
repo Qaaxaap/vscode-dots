@@ -104,4 +104,12 @@ in
     version = "0.21.2";
     hash = "sha256-dmytAV6X6ORdHzjhhPyC7vuvovXAEBQwAVuTo7ZecbY=";
   })
+  # Vim 键位：内嵌真的 neovim（用系统里 nix 装的那份），
+  # init 指向本仓库的 nvim-init.lua，两者都在 User/settings.json 里配置。
+  (fromOpenVsx {
+    namespace = "asvetliakov";
+    name = "vscode-neovim";
+    version = "1.20.0";
+    hash = "sha256-+A1G+3Qe2yzDslgX3ap3N03woHrqAp5Q5uj1nqVGE7k=";
+  })
 ]
