@@ -112,4 +112,14 @@ in
     version = "1.20.0";
     hash = "sha256-+A1G+3Qe2yzDslgX3ap3N03woHrqAp5Q5uj1nqVGE7k=";
   })
+  # 连远程开发机。VSCodium 用不了微软官方的 Remote-SSH（那个只在微软自己的
+  # 市场里，许可证不允许第三方编辑器使用），这是 Open VSX 上的社区实现，
+  # 支持 VSCodium 自己的 server。首次连接时它会在远端下载 server，
+  # 下载源是 github，开发机需要走代理。
+  (fromOpenVsx {
+    namespace = "jeanp413";
+    name = "open-remote-ssh";
+    version = "0.4.0";
+    hash = "sha256-TPTTcgBQ6vfmKZdwWT3vp8de4s1MmZyS5Kps4Wi2Y0s=";
+  })
 ]
