@@ -104,8 +104,8 @@ in
     version = "0.21.2";
     hash = "sha256-dmytAV6X6ORdHzjhhPyC7vuvovXAEBQwAVuTo7ZecbY=";
   })
-  # Vim 键位：内嵌真的 neovim（用系统里 nix 装的那份），
-  # init 指向本仓库的 nvim-init.lua，两者都在 User/settings.json 里配置。
+  # Vim 键位：内嵌系统里 nix 装的 nvim（靠 home.sessionPath 进 GUI 会话 PATH），
+  # init 走 NVIM_APPNAME=vscodium，指向本仓库的 nvim/init.lua。
   (fromOpenVsx {
     namespace = "asvetliakov";
     name = "vscode-neovim";
@@ -121,5 +121,13 @@ in
     name = "open-remote-ssh";
     version = "0.4.0";
     hash = "sha256-TPTTcgBQ6vfmKZdwWT3vp8de4s1MmZyS5Kps4Wi2Y0s=";
+  })
+  # Markdown 预览增强。内置的 markdown-language-features 已经能并排预览
+  # （Ctrl+K V），这个补 KaTeX/Graphviz 渲染、公式、导出 HTML/PDF、幻灯片等。
+  (fromOpenVsx {
+    namespace = "shd101wyy";
+    name = "markdown-preview-enhanced";
+    version = "0.8.39";
+    hash = "sha256-bRFEb6YtLFOTe9K1Y0vyfQDTgYVa6udy2CU2wz4Ht3w=";
   })
 ]
