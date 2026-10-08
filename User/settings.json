@@ -27,5 +27,10 @@
   // 按键延迟（UI 里点 Yes 写的就是这一条，值 1 是分组号）。
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
-  }
+  },
+  "files.autoSave": "afterDelay",
+
+  // Pylance（微软专有）在 open-vsx 上没有，语言服务交给 basedpyright，
+  // 这里关掉 Python 扩展对 Pylance 的查找。
+  "python.languageServer": "None"
 }

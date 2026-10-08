@@ -20,13 +20,30 @@ let
   # open-vsx 的下载地址形如
   #   https://open-vsx.org/api/<ns>/<name>/<ver>/file/<ns>.<name>-<ver>.vsix
   # namespace 的大小写按 open-vsx 注册的写法（GitHub、MS-CEINTL）。
+  #
+  # 带原生二进制的扩展（debugpy、ruff 这类）是平台特定发布，要显式给
+  # targetPlatform，否则 open-vsx 返回的默认变体可能是 darwin/alpine 的。
+  # 这类 vsix 的文件名带 `@<platform>`，nix 不接受 store 名里有 `@`，
+  # 因此这里自己拼一个不含 @ 的 name。
   fromOpenVsx =
     {
       namespace,
       name,
       version,
       hash,
+      targetPlatform ? null,
     }:
+    let
+      fileName =
+        "${namespace}.${name}-${version}"
+        + (if targetPlatform == null then "" else "-${targetPlatform}")
+        + ".vsix";
+      url =
+        if targetPlatform == null then
+          "https://open-vsx.org/api/${namespace}/${name}/${version}/file/${namespace}.${name}-${version}.vsix"
+        else
+          "https://open-vsx.org/api/${namespace}/${name}/${targetPlatform}/${version}/file/${namespace}.${name}-${version}@${targetPlatform}.vsix";
+    in
     buildVscodeExtension {
       pname = name;
       vscodeExtPublisher = namespace;
@@ -34,7 +51,8 @@ let
       vscodeExtUniqueId = "${namespace}.${name}";
       inherit version;
       src = pkgs.fetchurl {
-        url = "https://open-vsx.org/api/${namespace}/${name}/${version}/file/${namespace}.${name}-${version}.vsix";
+        inherit url;
+        name = fileName;
         inherit hash;
       };
     };
@@ -129,5 +147,40 @@ in
     name = "markdown-preview-enhanced";
     version = "0.8.39";
     hash = "sha256-bRFEb6YtLFOTe9K1Y0vyfQDTgYVa6udy2CU2wz4Ht3w=";
+  })
+  # ---- Python / torch 学习 ----
+  # Pylance 是专有的，open-vsx 上没有，语言服务用 basedpyright 代替，
+  # 并在 User/settings.json 里把 python.languageServer 设为 None 免得它去找 Pylance。
+  (fromOpenVsx {
+    namespace = "ms-python";
+    name = "python";
+    version = "2026.4.0";
+    hash = "sha256-Iyrq+wHwaYJP3ZLT5ijBxEK7z6HTzJRf+XB2NAuytKY=";
+  })
+  (fromOpenVsx {
+    namespace = "ms-python";
+    name = "debugpy";
+    version = "2026.6.0";
+    targetPlatform = "linux-x64";
+    hash = "sha256-x3RK9L9yl49XkmJKccgOK2IqERhXT62jqQPXCsA9W8o=";
+  })
+  (fromOpenVsx {
+    namespace = "ms-toolsai";
+    name = "jupyter";
+    version = "2025.9.1";
+    hash = "sha256-EQZgZWlExKsP9ofbSIwujFnGfsEh3PCbyqVLbt2c5x8=";
+  })
+  (fromOpenVsx {
+    namespace = "detachhead";
+    name = "basedpyright";
+    version = "1.40.2";
+    hash = "sha256-nIewuZJxTKL5KYy36YvaYhYS8O6WEhqOd+5/zMzi81E=";
+  })
+  (fromOpenVsx {
+    namespace = "charliermarsh";
+    name = "ruff";
+    version = "2026.84.0";
+    targetPlatform = "linux-x64";
+    hash = "sha256-rcF2hINVWsnGkOoGz/pCbUngaK9p/Wan03qSTnxB/Xs=";
   })
 ]
