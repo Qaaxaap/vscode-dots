@@ -32,5 +32,16 @@
 
   // Pylance（微软专有）在 open-vsx 上没有，语言服务交给 basedpyright，
   // 这里关掉 Python 扩展对 Pylance 的查找。
-  "python.languageServer": "None"
+  "python.languageServer": "None",
+  "explorer.confirmDragAndDrop": false,
+  "markdown-preview-enhanced.enablePreviewZenMode": true,
+  "markdown-preview-enhanced.previewTheme": "vscode.css",
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "remote.autoForwardPortsSource": "hybrid",
+  "editor.unicodeHighlight.nonBasicASCII": false,
+  "transgo.provider": "ai",
+  "transgo.ai.configs": [
+    
+
+  ]
 }
