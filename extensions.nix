@@ -229,4 +229,20 @@ in
     # 对 gzip 传输流取的哈希（fetchurl 存的是压缩流，见 fromMarketplace 说明）。
     hash = "sha256-1/3svuCLB88/K3mQ5s095VtNDaqgTB/5j7KoX60mbdg=";
   })
+  # 划词翻译 + 变量命名建议：选中文按 Alt+T 或右键，结果悬浮展示；
+  # 支持 OpenAI、Claude、DeepSeek、Gemini、GLM、Kimi、SiliconFlow。
+  (fromOpenVsx {
+    namespace = "lockp111";
+    name = "translate-helper";
+    version = "1.2.0";
+    hash = "sha256-ItRV+TSpXA+r8q9mB562o1UmQkPl88SUboMKTxgdIAc=";
+  })
+  # AI 翻译 & 悬浮翻译：侧边栏对话翻译、悬浮翻译、选中文本一键翻译、
+  # 语音朗读、驼峰/下划线命名转换；支持 DeepSeek/ChatGPT/Claude/Kimi/通义等。
+  (fromOpenVsx {
+    namespace = "tsinghua-lau";
+    name = "TransGo";
+    version = "1.1.9";
+    hash = "sha256-4mihWmKZiyVE73ZMYVAQ82EOCpGW6opSdsMGgEORt6M=";
+  })
 ]
