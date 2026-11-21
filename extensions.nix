@@ -57,6 +57,42 @@ let
       };
     };
 
+  # 微软市场（open-vsx 没有镜像的扩展）。vsix 从 marketplace 的 versioned
+  # vspackage 端点取；许可随扩展本身（vscode-fluent 为 MIT）。
+  #
+  # 该端点按 Accept-Encoding 返回 gzip 编码的 vsix，fetchurl 存的是 gzip 流
+  # 本身（不是 zip），而 buildVscodeExtension 的 unpack hook 只认 .vsix
+  # 结尾的文件（内部跑 unzip），所以先 gunzip 成 zip 文件，文件名保持
+  # .vsix。hash 是对 gzip 流取的，用 nix store prefetch-file 会先解压，
+  # 算出的 SRI 与之不同，别混用。
+  fromMarketplace =
+    {
+      publisher,
+      name,
+      version,
+      hash,
+    }:
+    let
+      rawVsix = pkgs.fetchurl {
+        url = "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publisher}/vsextensions/${name}/${version}/vspackage";
+        name = "${publisher}.${name}-${version}.vsix";
+        inherit hash;
+      };
+      vsix = pkgs.runCommand "${publisher}.${name}-${version}.vsix" {
+        nativeBuildInputs = [ pkgs.gzip ];
+      } ''
+        gunzip -c ${rawVsix} > "$out"
+      '';
+    in
+    buildVscodeExtension {
+      pname = name;
+      vscodeExtPublisher = publisher;
+      vscodeExtName = name;
+      vscodeExtUniqueId = "${publisher}.${name}";
+      inherit version;
+      src = vsix;
+    };
+
   # rust-analyzer 要单独处理：open-vsx 那份 vsix 不带 server 二进制（官方
   # marketplace 那份才带），扩展启动时只认 <扩展目录>/server/rust-analyzer，
   # 找不到就弹 "we don't ship binaries for your platform yet"；而扩展目录在
@@ -182,5 +218,15 @@ in
     version = "2026.84.0";
     targetPlatform = "linux-x64";
     hash = "sha256-rcF2hINVWsnGkOoGz/pCbUngaK9p/Wan03qSTnxB/Xs=";
+  })
+  # Fluent（.ftl）本地化文件支持：语法高亮、语法错误提示、符号列表
+  # （Ctrl+Shift+O）、悬停、从引用跳转到消息定义、提取字符串的 Code Action。
+  # open-vsx 没有镜像，取微软市场的 vsix。
+  (fromMarketplace {
+    publisher = "macabeus";
+    name = "vscode-fluent";
+    version = "1.1.0";
+    # 对 gzip 传输流取的哈希（fetchurl 存的是压缩流，见 fromMarketplace 说明）。
+    hash = "sha256-1/3svuCLB88/K3mQ5s095VtNDaqgTB/5j7KoX60mbdg=";
   })
 ]
